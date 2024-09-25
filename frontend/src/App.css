@@ -1,0 +1,23 @@
+#board{
+      width: 1250px;
+      height: 720px;
+    
+      display: grid;
+      grid-template-rows: repeat(72, 1fr);
+      grid-template-columns: repeat(125, 1fr);
+}
+
+.board1{
+  display: grid;
+  grid-template-rows: repeat(5, 1fr);
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.block {
+  
+  /* Maintain a 1:1 aspect ratio */
+  background-color: #d1fae5;
+  /* Example color */
+  transition: background-color 0.3s;
+  /* Smooth hover effect */
+}
