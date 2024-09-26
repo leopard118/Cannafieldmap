@@ -1,44 +1,35 @@
 import { useEffect, useState } from "react";
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
-import blocksData from "../data/blocksData";
+// import blocksData from "../data/blocksData";
 import Block from "./Block";
 import { useAtom } from "jotai";
-import { panstate } from "../store";
+import { initialTransform, panstate } from "../store";
+import axios from "axios";
+import Loading from "./Loading";
+
 function CannaFiledMap() {
-  const [blocks, setBlocks] = useState(blocksData);
+  const [blocks, setBlocks] = useState([]);
   const [isPan, setIsPan] = useAtom(panstate);
-  const [transformvalue, setTransformvalue] = useState({
-    x1: 0,
-    y1: 0,
-    x2: 0,
-    y2: 0,
-  });
+  const [transformvalue, setTransformvalue] = useAtom(initialTransform);
   const bwidth = 10;
   const bheight = 10;
   const w_num = 125;
   const h_num = 72;
   const limitscale = 15;
-  useEffect(() => {
-    console.log("useEffect");
 
-    const nextblocks = blocks.map((block) => ({
-      ...block,
-      isShow: false,
-    }));
-    if (
-      transformvalue.x2 - transformvalue.x1 ||
-      transformvalue.y2 - transformvalue.y1
-    ) {
-      console.log("success");
-      for (let i = transformvalue.x1; i <= transformvalue.x2; i++) {
-        for (let j = transformvalue.y1; j <= transformvalue.y2; j++) {
-          nextblocks[i * w_num + j].isShow = true;
-        }
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        const response = await axios.post(
+          "http://192.168.142.145:5000/api/cannafield",
+          transformvalue
+        );
+        setBlocks(response.data.cannafield);
+      } catch (error) {
+        console.error("Error fetching data:", error);
       }
-      setBlocks(nextblocks);
-    } else {
-      setBlocks(nextblocks);
-    }
+    };
+    fetch();
   }, [transformvalue]);
 
   const handleZoomChange = (ref) => {
@@ -103,6 +94,7 @@ function CannaFiledMap() {
 
   return (
     <div className="w-screen h-screen flex flex-col items-center justify-center">
+      {!blocks.length && <Loading />}
       <TransformWrapper
         options={{
           doubleClick: { disabled: true }, // Typo fixed here
@@ -120,16 +112,25 @@ function CannaFiledMap() {
             id="board"
             className={isPan ? "cursor-grabbing" : "cursor-pointer"}
           >
-            {blocks.map((item, index) => {
-              return (
-                <div
-                  key={index}
-                  className=" bg-emerald-100 w-[10px] h-[10px]  text-[1.5px] hover:bg-blue-400 !aspect-[1/1]"
-                >
-                  <Block isShow={item.isShow} num={index} data={item.pieces} />
-                </div>
-              );
-            })}
+            {blocks.length ? (
+              blocks.map((item, index) => {
+                return (
+                  <div
+                    key={index}
+                    className="w-[10px] h-[10px]  text-[1.5px] !aspect-[1/1]"
+                  >
+                    <Block
+                      isShow={item.isShow}
+                      num={index}
+                      data={item?.pieces}
+                      buyNum={item?.selectedNum}
+                    />
+                  </div>
+                );
+              })
+            ) : (
+              <div className="bg-white"></div>
+            )}
           </div>
         </TransformComponent>
       </TransformWrapper>

@@ -15,6 +15,7 @@ async function main() {
       for (let j = 0; j < 25; j++) {
         pieces.push({
           id: j,
+          isSelected: Math.random() > 0.8, // Rnadomly mark some blocks as solid
         });
       }
       initialData.push({
