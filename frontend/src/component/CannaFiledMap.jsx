@@ -101,7 +101,7 @@ function CannaFiledMap() {
           wheel: { step: 2 }, // Correct property name
         }}
         initialScale={10}
-        minScale={1}
+        minScale={0.5}
         maxScale={30}
         onZoomStop={handleZoomChange}
         onPanningStop={handleZoomChange}

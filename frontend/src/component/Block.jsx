@@ -9,6 +9,15 @@ function Block({ isShow, num, data, buyNum }) {
   const [isPan, setIsPan] = useAtom(panstate);
   const [tileNum, setTileNum] = useAtom(selectedNum);
   const [, setSelectedTiles] = useAtom(selectedPieces);
+  const colors = [
+    "bg-white",
+    "bg-green-100",
+    "bg-green-200",
+    "bg-green-300",
+    "bg-green-400",
+    "bg-green-500",
+    "bg-green-600",
+  ];
 
   return (
     <div className={isShow ? "board1 !aspect-[1/1] text-[1px]" : ""}>
@@ -61,9 +70,9 @@ function Block({ isShow, num, data, buyNum }) {
         ))
       ) : (
         <div
-          className={`bg-green-${Math.ceil(
-            buyNum / 5
-          )}00 flex justify-center items-center !aspect-[1/1]`}
+          className={`${
+            colors[Math.ceil(buyNum / 5)]
+          } flex justify-center items-center !aspect-[1/1]`}
         >{`(${Math.floor(num / w_num)},${num % w_num})${num}`}</div>
       )}
     </div>
