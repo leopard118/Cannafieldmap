@@ -10,8 +10,10 @@ import { DevTools } from "jotai-devtools";
  * top-level App component and setting up the global state management context.
  */
 createRoot(document.getElementById("root")).render(
-  <Provider>
-    <App />
-    <DevTools />
-  </Provider>
+  <>
+    <Provider>
+      <App />
+      <DevTools />
+    </Provider>
+  </>
 );
