@@ -45,7 +45,7 @@ const getCtrl = expressAsyncHandler(async (req, res) => {
   const { x1, y1, x2, y2 } = req.body;
 
   try {
-    let flagData = Array(9000).fill(false);
+    let flagData = Array(5000).fill(false);
     if (cannafieldData.length === 0) {
       const results = await Cannafield.aggregate([
         {
@@ -80,7 +80,7 @@ const getCtrl = expressAsyncHandler(async (req, res) => {
       for (let i = Number(x1); i <= Number(x2); i++) {
         for (let j = Number(y1); j <= Number(y2); j++) {
           // Ensure index exists before assignment
-          const index = i * 125 + j;
+          const index = i * 100 + j;
           flagData[index] = true;
         }
       }

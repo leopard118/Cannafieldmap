@@ -10,9 +10,9 @@ async function main() {
 
     // Sample data to be inserted
     const initialData = [];
-    for (let i = 0; i < 9000; i++) {
+    for (let i = 0; i < 5000; i++) {
       const pieces = [];
-      for (let j = 0; j < 25; j++) {
+      for (let j = 0; j < 9; j++) {
         pieces.push({
           id: j,
           isSelected: Math.random() > 0.8, // Rnadomly mark some blocks as solid

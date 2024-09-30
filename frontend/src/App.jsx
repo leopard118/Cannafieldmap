@@ -4,7 +4,7 @@ import Purcharge from "./component/Purcharge";
 
 function App() {
   return (
-    <div className="relative ">
+    <div className="relative">
       <CannaFiledMap />
       <Purcharge />
     </div>

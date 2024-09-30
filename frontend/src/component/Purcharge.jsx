@@ -13,7 +13,7 @@ const Purcharge = () => {
     setIsLoading(true);
     try {
       const response = await axios.post(
-        "http://192.168.142.145:5000/api/cannafield/purcharge",
+        `${import.meta.env.VITE_API_URL}/cannafield/purcharge`,
         selectedTiles
       );
       console.log(response.data.msg);
@@ -35,7 +35,7 @@ const Purcharge = () => {
       {isLoading && <Loading />}
       <div className="bg-blue-50 absolute right-3 top-3 w-60 p-3  shadow-md shadow-slate-800">
         <div className="text-2xl text-blue-600 text-center py-2">
-          <b>Purcharge</b>
+          <b>Purcharse</b>
         </div>
         <hr />
         <div className="py-3">{tileNum ? tileNum : "No"} Tiles Selected</div>
