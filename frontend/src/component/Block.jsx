@@ -4,33 +4,31 @@ import { useState } from "react";
 import { panstate, selectedNum, selectedPieces } from "../store";
 
 function Block({ isShow, num, data, buyNum }) {
-  const w_num = 125;
-  const [isSelect, setIsSelect] = useState(Array(25).fill(false));
+  const [isSelect, setIsSelect] = useState(Array(9).fill(false));
   const [isPan, setIsPan] = useAtom(panstate);
   const [tileNum, setTileNum] = useAtom(selectedNum);
   const [, setSelectedTiles] = useAtom(selectedPieces);
   const colors = [
     "bg-white",
-    "bg-green-100",
     "bg-green-200",
-    "bg-green-300",
     "bg-green-400",
-    "bg-green-500",
     "bg-green-600",
+    "bg-green-800",
+    "bg-green-900",
   ];
 
   return (
-    <div className={isShow ? "board1 !aspect-[1/1] text-[1px]" : ""}>
+    <div className={isShow ? "board1 !aspect-[1/1] " : ""}>
       {isShow ? (
         data.map((item, index) => (
           <div
             key={index}
-            className={`flex justify-center items-center ${
+            className={`flex justify-center items-center rounded-md border border-gray-200 ${
               item.isSelected
-                ? "bg-green-500"
+                ? "bg-green-400"
                 : isSelect[index]
-                ? "bg-sky-400   hover:cursor-pointer hover:bg-sky-500"
-                : "bg-cyan-200 hover:cursor-pointer hover:bg-sky-400"
+                ? "bg-gray-400 hover:cursor-pointer hover:bg-gray-400"
+                : "bg-gray-50 hover:cursor-pointer hover:bg-gray-300"
             }`}
             onClick={() => {
               console.log("isPan", isPan);
@@ -41,7 +39,7 @@ function Block({ isShow, num, data, buyNum }) {
               if (item.isSelected) {
                 return;
               }
-              console.log("click");
+              // console.log("click");
               if (isSelect[index]) {
                 setTileNum(tileNum - 1);
                 setSelectedTiles((prevSelectedTiles) =>
@@ -64,16 +62,14 @@ function Block({ isShow, num, data, buyNum }) {
               nextSelect[index] = !isSelect[index];
               setIsSelect(nextSelect);
             }}
-          >
-            {index + 1}
-          </div>
+          ></div>
         ))
       ) : (
         <div
           className={`${
-            colors[Math.ceil(buyNum / 5)]
-          } flex justify-center items-center !aspect-[1/1]`}
-        >{`(${Math.floor(num / w_num)},${num % w_num})${num}`}</div>
+            colors[Math.ceil(buyNum / 2)]
+          } flex justify-center items-center !aspect-[1/1] rounded-md`}
+        ></div>
       )}
     </div>
   );

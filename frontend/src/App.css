@@ -1,16 +1,16 @@
 #board{
-      width: 1250px;
-      height: 720px;
+      width: 7500px;
+      height: 3750px;
     
       display: grid;
-      grid-template-rows: repeat(72, 1fr);
-      grid-template-columns: repeat(125, 1fr);
+      grid-template-rows: repeat(50, 1fr);
+      grid-template-columns: repeat(100, 1fr);
 }
 
 .board1{
   display: grid;
-  grid-template-rows: repeat(5, 1fr);
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  grid-template-columns: repeat(3, 1fr);
 }
 
 .block {
