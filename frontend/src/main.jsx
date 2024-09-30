@@ -2,7 +2,6 @@ import { createRoot } from "react-dom/client";
 import App from "./App.jsx";
 import "./index.css";
 import { Provider } from "jotai";
-import { DevTools } from "jotai-devtools";
 
 /**
  * Renders the main React application component wrapped in a Jotai provider.
@@ -13,7 +12,6 @@ createRoot(document.getElementById("root")).render(
   <>
     <Provider>
       <App />
-      <DevTools />
     </Provider>
   </>
 );
