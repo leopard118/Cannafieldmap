@@ -1,10 +1,10 @@
-import "./App.css";
-import CannaFiledMap from "./component/CannaFiledMap";
-import Purcharge from "./component/Purcharge";
+import './App.css';
+import CannaFiledMap from './component/CannaFiledMap';
+import Purcharge from './component/Purcharge';
 
 function App() {
   return (
-    <div className="relative">
+    <div className='relative flex justify-center items-center'>
       <CannaFiledMap />
       <Purcharge />
     </div>

@@ -1,14 +1,16 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
-import Block from "./Block";
-import { useAtom } from "jotai";
-import { currentState, initialTransform, panstate } from "../store";
-import axios from "axios";
-import Loading from "./Loading";
-import Control from "./Control";
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
+import Block from './Block';
+import { useAtom } from 'jotai';
+import { currentState, initialTransform, panstate } from '../store';
+import axios from 'axios';
+import Loading from './Loading';
+import Control from './Control';
 
 function CannaFiledMap() {
   const [blocks, setBlocks] = useState([]);
+  const [minScale, setMinScale] = useState(0.1);
+  const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
   const [isPan, setIsPan] = useAtom(panstate);
   const [transformvalue, setTransformvalue] = useAtom(initialTransform);
   const bwidth = 75;
@@ -19,11 +21,41 @@ function CannaFiledMap() {
   const [, setState] = useAtom(currentState);
 
   const timeoutRef = useRef(null);
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (let entry of entries) {
+        setContainerSize({
+          width: entry.contentRect.width * 0.8,
+          height: entry.contentRect.height * 0.8,
+        });
+      }
+    });
+
+    if (containerRef.current) {
+      resizeObserver.observe(containerRef.current);
+    }
+
+    return () => resizeObserver.disconnect();
+  }, []);
+
+  useEffect(() => {
+    containerSize.width / 7500 > containerSize.height / 3750
+      ? setMinScale(containerSize.width / 7500)
+      : setMinScale(containerSize.height / 3750);
+    console.log('minScale: ', minScale);
+    console.log('height: ', containerSize.height);
+    console.log(containerSize.width / 7500);
+    console.log(containerSize.height / 3750);
+  }, [containerSize.width, containerSize.height, minScale]);
+
+  console.log('Container Size: ', containerSize);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log("api fetch");
+        console.log('api fetch');
 
         const response = await axios.post(
           `${import.meta.env.VITE_API_URL}/cannafield`,
@@ -31,7 +63,7 @@ function CannaFiledMap() {
         );
         setBlocks(response.data.cannafield);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error('Error fetching data:', error);
       }
     };
     fetchData();
@@ -51,7 +83,7 @@ function CannaFiledMap() {
             x2 = 0,
             y2 = 0; // Initialize coordinates
 
-          console.log("state:", scale, positionX, positionY);
+          console.log('state:', scale, positionX, positionY);
           setState({ scale, x: positionX, y: positionY });
 
           if (scale >= limitscale) {
@@ -93,7 +125,7 @@ function CannaFiledMap() {
               x2,
               y2,
             });
-            console.log("call", x1, y1, x2, y2);
+            console.log('call', x1, y1, x2, y2);
           }
         };
         handleZoomChange(scale, positionX, positionY);
@@ -118,35 +150,38 @@ function CannaFiledMap() {
   };
 
   return (
-    <div className="w-screen h-screen flex flex-col items-center justify-center ">
+    <div
+      className='w-full h-screen flex flex-col items-center justify-center'
+      ref={containerRef}
+    >
       {!blocks.length && <Loading />}
       <TransformWrapper
         // wheel={{ smoothStep: 0.005 }}
         doubleClick={{ disabled: true }}
         initialScale={1}
-        minScale={0.2}
+        minScale={minScale}
         maxScale={8}
         onPanning={handlePan}
         onTransformed={debouncedHandle}
       >
-        <div className="relative border-2 border-gray-400 rounded-md">
+        <div className='relative border-2 border-gray-400 rounded-md'>
           <Control />
           <TransformComponent
             wrapperStyle={{
-              width: "1500px",
-              height: "750px",
+              width: '80vw',
+              height: '80vh',
             }}
           >
             <div
-              id="board"
-              className={isPan ? "cursor-grabbing" : "cursor-pointer"}
+              id='board'
+              className={isPan ? 'cursor-grabbing' : 'cursor-pointer'}
             >
               {blocks.length ? (
                 blocks.map((item, index) => {
                   return (
                     <div
                       key={index}
-                      className=" border border-gray-300 text-sm !aspect-[1/1] rounded-md"
+                      className=' border border-gray-300 text-sm !aspect-[1/1] rounded-md'
                     >
                       <Block
                         isShow={item.isShow}
@@ -158,7 +193,7 @@ function CannaFiledMap() {
                   );
                 })
               ) : (
-                <div className="bg-white"></div>
+                <div className='bg-white'></div>
               )}
             </div>
           </TransformComponent>
