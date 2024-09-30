@@ -27,8 +27,8 @@ function CannaFiledMap() {
     const resizeObserver = new ResizeObserver((entries) => {
       for (let entry of entries) {
         setContainerSize({
-          width: entry.contentRect.width,
-          height: entry.contentRect.height,
+          width: entry.contentRect.width * 0.8,
+          height: entry.contentRect.height * 0.8,
         });
       }
     });
@@ -43,9 +43,11 @@ function CannaFiledMap() {
   useEffect(() => {
     containerSize.width / 7500 > containerSize.height / 3750
       ? setMinScale(containerSize.width / 7500)
-      : setMinScale(containerSize.width / 3750);
+      : setMinScale(containerSize.height / 3750);
     console.log('minScale: ', minScale);
     console.log('height: ', containerSize.height);
+    console.log(containerSize.width / 7500);
+    console.log(containerSize.height / 3750);
   }, [containerSize.width, containerSize.height, minScale]);
 
   console.log('Container Size: ', containerSize);
@@ -149,7 +151,7 @@ function CannaFiledMap() {
 
   return (
     <div
-      className='w-4/5 h-screen flex flex-col items-center justify-center'
+      className='w-full h-screen flex flex-col items-center justify-center'
       ref={containerRef}
     >
       {!blocks.length && <Loading />}
@@ -157,7 +159,7 @@ function CannaFiledMap() {
         // wheel={{ smoothStep: 0.005 }}
         doubleClick={{ disabled: true }}
         initialScale={1}
-        minScale={0.2}
+        minScale={minScale}
         maxScale={8}
         onPanning={handlePan}
         onTransformed={debouncedHandle}
